@@ -5,41 +5,35 @@ import com.technolygames.freetts_app3.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 //java
 import java.util.Locale;
-import javax.speech.Engine;
-import javax.speech.Central;
-import javax.speech.AudioException;
-import javax.speech.EngineException;
 //android
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.Voice;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.navigation.Navigation;
 import androidx.navigation.NavController;
 //extensión larga
+import android.speech.tts.TextToSpeech;
 import androidx.navigation.ui.NavigationUI;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.core.app.NotificationCompat;
-import javax.speech.synthesis.Synthesizer;
-import javax.speech.synthesis.SynthesizerModeDesc;
+import androidx.core.app.NotificationManagerCompat;
 
 public class MainActivity extends androidx.appcompat.app.AppCompatActivity{
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    private TextToSpeech tts;
+    private NotificationCompat.Builder builder;
 
-    private String CHANNEL_ID;
+    private TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        NotificationManagerCompat nmc=NotificationManagerCompat.from(this);
 
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -59,23 +53,18 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity{
             }
         });
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                TextView ta=(TextView)findViewById(R.id.edit_text);
-                Toast.makeText(getApplicationContext(), ta.getText().toString(), Toast.LENGTH_SHORT).show();
-                tts.setLanguage(new Locale("es","mx"));
-                tts.speak(ta.getText().toString(),TextToSpeech.QUEUE_FLUSH,null);
-            }
-        });
-
         binding.fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Snackbar.make(view,"Lee el texto del área de texto",Snackbar.LENGTH_LONG).setAction("Acción",new View.OnClickListener(){
+                Snackbar.make(view,"Presiona para escuchar",Snackbar.LENGTH_LONG).setAction("Leer texto",new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
-                        //NotificationCompat.Builder builder=new NotificationCompat.Builder(this,CHANNEL_ID).setSmallIcon(R.drawable.ic_launcher_background).setContentTitle("Test").setContentText("Content text").setStyle(new NotificationCompat.BigTextStyle().bigText("big style text")).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        TextView ta=(TextView)findViewById(R.id.edit_text);
+                        tts.setLanguage(new Locale("es","mx"));
+                        builder=new NotificationCompat.Builder(getApplicationContext(),NotificationUtils.ANDROID_CHANNEL_ID).setSmallIcon(R.drawable.ic_launcher_background).setContentTitle("TTS dice").setContentText("Content text").setStyle(new NotificationCompat.BigTextStyle().bigText(ta.getText())).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        nmc.notify(NotificationCompat.PRIORITY_DEFAULT,builder.build());
+                        new NotificationUtils(getApplicationContext()).createChannels();
+                        tts.speak(ta.getText().toString(), TextToSpeech.QUEUE_FLUSH, Bundle.EMPTY, null);
                     }
                 }).show();
             }

@@ -1,26 +1,22 @@
 package com.technolygames.freetts_app3;
-
+//clases
+import com.technolygames.freetts_app3.databinding.FragmentSecondBinding;
+//android
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+//extensión larga
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.technolygames.freetts_app3.databinding.FragmentSecondBinding;
 
-public class SecondFragment extends Fragment {
+public class SecondFragment extends androidx.fragment.app.Fragment {
 
     private FragmentSecondBinding binding;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
