@@ -6,15 +6,22 @@ import com.google.android.material.snackbar.Snackbar;
 //java
 import java.util.Locale;
 //android
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.navigation.NavController;
 //extensión larga
 import android.speech.tts.TextToSpeech;
+import android.widget.Toast;
+
 import androidx.navigation.ui.NavigationUI;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.core.app.NotificationCompat;
@@ -53,6 +60,14 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity{
             }
         });
 
+        findViewById(R.id.sendData).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i=new Intent(view.getContext(),MainActivity2.class);
+                startActivity(i);
+            }
+        });
+
         binding.fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -61,7 +76,7 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity{
                     public void onClick(View view){
                         TextView ta=(TextView)findViewById(R.id.edit_text);
                         tts.setLanguage(new Locale("es","mx"));
-                        builder=new NotificationCompat.Builder(getApplicationContext(),NotificationUtils.ANDROID_CHANNEL_ID).setSmallIcon(R.drawable.ic_launcher_background).setContentTitle("TTS dice").setContentText("Content text").setStyle(new NotificationCompat.BigTextStyle().bigText(ta.getText())).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        builder=new NotificationCompat.Builder(getApplicationContext(),NotificationUtils.ANDROID_CHANNEL_ID).setSmallIcon(R.drawable.ic_launcher_background).setContentTitle("TTS dice").setContentText(ta.getText()).setPriority(NotificationCompat.PRIORITY_DEFAULT);
                         nmc.notify(NotificationCompat.PRIORITY_DEFAULT,builder.build());
                         new NotificationUtils(getApplicationContext()).createChannels();
                         tts.speak(ta.getText().toString(), TextToSpeech.QUEUE_FLUSH, Bundle.EMPTY, null);
