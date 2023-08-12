@@ -12,16 +12,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.navigation.NavController;
 //extensión larga
 import android.speech.tts.TextToSpeech;
-import android.widget.Toast;
-
 import androidx.navigation.ui.NavigationUI;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.core.app.NotificationCompat;
@@ -75,11 +69,13 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity{
                     @Override
                     public void onClick(View view){
                         TextView ta=(TextView)findViewById(R.id.edit_text);
+
                         tts.setLanguage(new Locale("es","mx"));
+
                         builder=new NotificationCompat.Builder(getApplicationContext(),NotificationUtils.ANDROID_CHANNEL_ID).setSmallIcon(R.drawable.ic_launcher_background).setContentTitle("TTS dice").setContentText(ta.getText()).setPriority(NotificationCompat.PRIORITY_DEFAULT);
                         nmc.notify(NotificationCompat.PRIORITY_DEFAULT,builder.build());
                         new NotificationUtils(getApplicationContext()).createChannels();
-                        tts.speak(ta.getText().toString(), TextToSpeech.QUEUE_FLUSH, Bundle.EMPTY, null);
+                        tts.speak(ta.getText().toString(),TextToSpeech.QUEUE_FLUSH,Bundle.EMPTY,null);
                     }
                 }).show();
             }
@@ -114,6 +110,7 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity{
         return NavigationUI.navigateUp(navController,appBarConfiguration)||super.onSupportNavigateUp();
     }
 
+    @Override
     protected void onPause(){
         if(tts!=null){
             tts.stop();
